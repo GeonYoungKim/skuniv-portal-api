@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @RequiredArgsConstructor
-public class PortalConfiguration {
+public class WebConfiguration {
     private final PortalAuthenticationFilter portalAuthenticationFilter;
     private final String[] URL_FILTER_PATTERNS = {
 
@@ -23,5 +23,4 @@ public class PortalConfiguration {
         registrationBean.addUrlPatterns(URL_FILTER_PATTERNS);
         return registrationBean;
     }
-
 }

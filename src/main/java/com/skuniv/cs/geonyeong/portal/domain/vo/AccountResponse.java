@@ -6,10 +6,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@Builder
 @NoArgsConstructor
 public class AccountResponse {
     private String token;
     private AccountType accountType;
 
+    @Builder
+    public AccountResponse(String token, AccountType accountType) {
+        this.token = token;
+        this.accountType = accountType;
+    }
 }
