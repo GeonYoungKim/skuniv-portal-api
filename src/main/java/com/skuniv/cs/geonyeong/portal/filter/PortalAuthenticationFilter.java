@@ -2,6 +2,7 @@ package com.skuniv.cs.geonyeong.portal.filter;
 
 
 import com.skuniv.cs.geonyeong.portal.enums.AccountType;
+import com.skuniv.cs.geonyeong.portal.exception.MissingAccountTypeException;
 import com.skuniv.cs.geonyeong.portal.exception.TokenExpireException;
 import com.skuniv.cs.geonyeong.portal.service.JwtService;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -28,8 +29,8 @@ public class PortalAuthenticationFilter extends AbstractRequestLoggingFilter {
 
     @Override
     protected void beforeRequest(HttpServletRequest request, String message) {
-        AccountType accountType = AccountType.valueOf(request.getHeader(HEADER_ACCOUNT_TYPE_KEY));
         try {
+           AccountType accountType = AccountType.valueOf(request.getHeader(HEADER_ACCOUNT_TYPE_KEY));
             switch (accountType) {
                 case PROFESSOR:
                     jwtService.checkProcessor(request.getHeader(HEADER_TOKEN_KEY));
@@ -41,6 +42,9 @@ public class PortalAuthenticationFilter extends AbstractRequestLoggingFilter {
         } catch (ExpiredJwtException e) {
             log.error("토큰이 만료되었음.");
             throw new TokenExpireException();
+        } catch (IllegalArgumentException e) {
+            log.error("Missing Account-Type");
+            throw new MissingAccountTypeException();
         }
     }
 

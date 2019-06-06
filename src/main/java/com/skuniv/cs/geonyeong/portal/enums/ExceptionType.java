@@ -1,6 +1,7 @@
 package com.skuniv.cs.geonyeong.portal.enums;
 
 import com.skuniv.cs.geonyeong.portal.domain.vo.ExceptionResponse;
+import com.skuniv.cs.geonyeong.portal.exception.MissingAccountTypeException;
 import com.skuniv.cs.geonyeong.portal.exception.ProfessorSignInException;
 import com.skuniv.cs.geonyeong.portal.exception.TokenExpireException;
 import java.util.Optional;
@@ -13,7 +14,8 @@ import org.apache.commons.lang3.StringUtils;
 @AllArgsConstructor
 public enum ExceptionType {
     PROFESSOR_SIGNIN_EXCEPTION(ProfessorSignInException.class, 80801, "Professor Sign In Exception"),
-    TOKEN_EXPIRE_EXCEPTION(TokenExpireException.class, 80802, "Token Expire")
+    TOKEN_EXPIRE_EXCEPTION(TokenExpireException.class, 80802, "Token Expire"),
+    MISS_ACCOUNT_TYPE_EXCEPTION(MissingAccountTypeException.class, 10001, "request header's missing Account-Type Key")
     ;
 
     private Class<? extends Exception> exception;
