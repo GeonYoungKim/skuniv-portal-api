@@ -5,14 +5,14 @@ import com.skuniv.cs.geonyeong.portal.enums.ExceptionType;
 import com.skuniv.cs.geonyeong.portal.exception.MissingAccountTypeException;
 import com.skuniv.cs.geonyeong.portal.exception.ProfessorSignInException;
 import com.skuniv.cs.geonyeong.portal.exception.TokenExpireException;
+import com.skuniv.cs.geonyeong.portal.exception.TokenInvalidException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @Slf4j
 @RestControllerAdvice(basePackages = {
-    "com.skuniv.cs.geonyeong.portal.controller",
-    "com.skuniv.cs.geonyeong.portal.filter"
+    "com.skuniv.cs.geonyeong.portal.controller"
 })
 public class ExceptionHandlerAdvice {
 
@@ -31,6 +31,11 @@ public class ExceptionHandlerAdvice {
 
     @ExceptionHandler(value = MissingAccountTypeException.class)
     public ExceptionResponse handleMissingAccountTypeException(MissingAccountTypeException e) {
+        return ExceptionType.getExceptionResponse(e).orElse(DEFAULT_EXCEPTION_RESPONSE);
+    }
+
+    @ExceptionHandler(value = TokenInvalidException.class)
+    public ExceptionResponse handleMissingAccountTypeException(TokenInvalidException e) {
         return ExceptionType.getExceptionResponse(e).orElse(DEFAULT_EXCEPTION_RESPONSE);
     }
 }

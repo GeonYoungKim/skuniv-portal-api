@@ -95,4 +95,9 @@ public class JwtService {
             .setSigningKey(DatatypeConverter.parseBase64Binary(secretKey))
             .parseClaimsJws(jwt).getBody();
     }
+
+    public String getJwtId(String jwt) {
+        Claims claims = makeClaims(jwt);
+        return (String) claims.get(ID_FIELD);
+    }
 }

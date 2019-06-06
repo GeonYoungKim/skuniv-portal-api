@@ -1,14 +1,15 @@
 package com.skuniv.cs.geonyeong.portal.controller;
 
 
-import com.skuniv.cs.geonyeong.portal.domain.entity.Professor;
-import com.skuniv.cs.geonyeong.portal.domain.vo.AccountResponse;
-import com.skuniv.cs.geonyeong.portal.enums.AccountType;
-import com.skuniv.cs.geonyeong.portal.service.ProfessorService;
+import static com.skuniv.cs.geonyeong.portal.constant.PortalConstant.PROFESSOR_ID_KEY;
+
+import com.skuniv.cs.geonyeong.portal.domain.entity.Lecture;
+import com.skuniv.cs.geonyeong.portal.service.LectureService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -20,16 +21,16 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/portal/professor")
 public class ProfessorController {
-    private final ProfessorService professorService;
+    private final LectureService lectureService;
 
-    @RequestMapping(value = "/signUp", method = {RequestMethod.POST})
-    public Professor signUp(@RequestBody Professor professor) {
-        return professorService.signUp(professor);
+    @RequestMapping(value = "/lecture", method = {RequestMethod.GET})
+    public List<Lecture> getLectures(@RequestAttribute(name = PROFESSOR_ID_KEY) String professorId) {
+        log.info("lectures");
+        return lectureService.getLectures(professorId);
     }
 
-    @RequestMapping(value = "/signIn", method = {RequestMethod.POST})
-    public AccountResponse signIn(@RequestBody Professor professor) {
-        String token = professorService.signIn(professor);
-        return AccountResponse.builder().token(token).accountType(AccountType.PROFESSOR).build();
+    @RequestMapping(value = "/lecture", method = {RequestMethod.POST})
+    public Lecture createLecture(@RequestAttribute(name = PROFESSOR_ID_KEY) String professorId, @RequestBody Lecture lecture) {
+        return lectureService.createLecture(professorId, lecture);
     }
 }

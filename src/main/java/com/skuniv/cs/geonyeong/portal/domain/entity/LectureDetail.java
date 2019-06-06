@@ -1,5 +1,7 @@
 package com.skuniv.cs.geonyeong.portal.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.Date;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -41,5 +43,6 @@ public class LectureDetail {
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "lecture_id")
+    @JsonIgnore
     private Lecture lecture;
 }

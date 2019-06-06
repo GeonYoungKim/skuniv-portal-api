@@ -1,26 +1,40 @@
 package com.skuniv.cs.geonyeong.portal.configuration;
 
-import com.skuniv.cs.geonyeong.portal.filter.PortalAuthenticationFilter;
+import com.skuniv.cs.geonyeong.portal.interceptor.PortalInterceptor;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import springfox.documentation.builders.PathSelectors;
+import springfox.documentation.builders.RequestHandlerSelectors;
+import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spring.web.plugins.Docket;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @Configuration
+@EnableSwagger2
 @RequiredArgsConstructor
-public class WebConfiguration {
-    private final PortalAuthenticationFilter portalAuthenticationFilter;
-    private final String[] URL_FILTER_PATTERNS = {
-
-    };
+public class WebConfiguration implements WebMvcConfigurer {
+    private final PortalInterceptor portalInterceptor;
 
     @Bean
-    public FilterRegistrationBean<PortalAuthenticationFilter> authenticationFilter(){
-        FilterRegistrationBean<PortalAuthenticationFilter> registrationBean
-            = new FilterRegistrationBean<>();
+    public Docket docket() {
+        return new Docket(DocumentationType.SWAGGER_2)
+            .groupName("skuniv portal")
+            .select()
+            .apis(RequestHandlerSelectors
+                .basePackage("com.skuniv.cs.geonyeong.portal.controller"))
+            .paths(PathSelectors.ant("/api/v1/portal/**"))
+            .build();
+    }
 
-        registrationBean.setFilter(portalAuthenticationFilter);
-        registrationBean.addUrlPatterns(URL_FILTER_PATTERNS);
-        return registrationBean;
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(portalInterceptor)
+            .addPathPatterns("/api/v1/portal/professor/**")
+            .addPathPatterns("/api/v1/portal/account/**")
+        ;
     }
 }

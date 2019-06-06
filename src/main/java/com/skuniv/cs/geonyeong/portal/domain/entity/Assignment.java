@@ -1,5 +1,8 @@
 package com.skuniv.cs.geonyeong.portal.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -48,13 +51,15 @@ public class Assignment {
     @Column(name = "end_date")
     private Date endDate;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "student_assignment",
         joinColumns = @JoinColumn(name = "assignment_id"),
         inverseJoinColumns = @JoinColumn(name = "student_id"))
+    @JsonIgnore
     private List<Student> studentList;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "lecture_id")
+    @JsonIgnore
     private Lecture lecture;
 }
