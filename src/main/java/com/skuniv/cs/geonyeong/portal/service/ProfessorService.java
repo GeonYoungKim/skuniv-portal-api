@@ -2,17 +2,18 @@ package com.skuniv.cs.geonyeong.portal.service;
 
 import static com.skuniv.cs.geonyeong.portal.constant.PortalConstant.DAY_OF_WEEK_MAP;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.skuniv.cs.geonyeong.portal.domain.entity.Assignment;
 import com.skuniv.cs.geonyeong.portal.domain.entity.Lecture;
 import com.skuniv.cs.geonyeong.portal.domain.entity.LectureDetail;
 import com.skuniv.cs.geonyeong.portal.domain.entity.Professor;
 import com.skuniv.cs.geonyeong.portal.domain.entity.Semester;
+import com.skuniv.cs.geonyeong.portal.domain.vo.ProfessorAssignmentDetail;
+import com.skuniv.cs.geonyeong.portal.repository.AssignmentRepository;
 import com.skuniv.cs.geonyeong.portal.repository.LectureDetailRepository;
 import com.skuniv.cs.geonyeong.portal.repository.LectureRepository;
 import com.skuniv.cs.geonyeong.portal.repository.ProfessorRepository;
 import com.skuniv.cs.geonyeong.portal.repository.SemesterRepository;
-import java.util.ArrayList;
+import com.skuniv.cs.geonyeong.portal.repository.StudentAssignmentRepository;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
@@ -25,14 +26,32 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class LectureService {
-
+public class ProfessorService {
+    private final AssignmentRepository assignmentRepository;
+    private final StudentAssignmentRepository studentAssignmentRepository;
     private final LectureRepository lectureRepository;
     private final ProfessorRepository professorRepository;
     private final LectureDetailRepository lectureDetailRepository;
     private final SemesterRepository semesterRepository;
 
+
     private final String REPLACE_DAY = "요일";
+
+
+    public List<Assignment> getLectureAssignments(Long lectureId) {
+        return assignmentRepository.findByLecture(lectureRepository.findById(lectureId).get());
+    }
+
+    public List<ProfessorAssignmentDetail> getProfessorAssignmentDetail(Long assignmentId) {
+        return studentAssignmentRepository.findByAssignmentId(assignmentId);
+    }
+
+    public Assignment createLectureAssignment(Long lectureId, Assignment assignment) {
+        Lecture lecture = lectureRepository.findById(lectureId).get();
+        lecture.addAssignment(assignment);
+        lectureRepository.save(lecture);
+        return assignment;
+    }
 
     public List<Lecture> getLectures(Long semesterId, String professorId) {
         Professor professor = professorRepository.findById(professorId).get();
@@ -65,7 +84,7 @@ public class LectureService {
                     .lectureDay(DAY_OF_WEEK_MAP.inverse().get(dayNum))
                     .lectureDate(new Date(cal.getTimeInMillis()))
                     .build();
-                    lecture.addLectureDetail(lectureDetail);
+                lecture.addLectureDetail(lectureDetail);
             }
         }
     }

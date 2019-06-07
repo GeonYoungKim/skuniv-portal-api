@@ -8,8 +8,7 @@ import com.skuniv.cs.geonyeong.portal.domain.entity.Assignment;
 import com.skuniv.cs.geonyeong.portal.domain.entity.Lecture;
 import com.skuniv.cs.geonyeong.portal.domain.entity.LectureDetail;
 import com.skuniv.cs.geonyeong.portal.domain.vo.ProfessorAssignmentDetail;
-import com.skuniv.cs.geonyeong.portal.service.AssignmentService;
-import com.skuniv.cs.geonyeong.portal.service.LectureService;
+import com.skuniv.cs.geonyeong.portal.service.ProfessorService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,15 +27,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/api/v1/portal/professor")
 public class ProfessorController {
 
-    private final LectureService lectureService;
-    private final AssignmentService assignmentService;
+    private final ProfessorService professorService;
 
     @RequestMapping(value = "/semester/{semesterId}/lecture", method = {RequestMethod.GET})
     public List<Lecture> getLectures(
         @PathVariable(value = "semesterId") Long semesterId,
         @RequestAttribute(name = PROFESSOR_ID_KEY) String professorId) {
         log.info("lectures");
-        return lectureService.getLectures(semesterId, professorId);
+        return professorService.getLectures(semesterId, professorId);
     }
 
     @RequestMapping(value = "/semester/{semesterId}/lecture", method = {RequestMethod.POST})
@@ -45,37 +43,37 @@ public class ProfessorController {
         @RequestAttribute(name = PROFESSOR_ID_KEY) String professorId,
         @RequestBody Lecture lecture) throws JsonProcessingException {
         log.info("createLecture");
-        return lectureService.createLecture(semesterId, professorId, lecture);
+        return professorService.createLecture(semesterId, professorId, lecture);
     }
 
     @RequestMapping(value = "/lecture/{lectureId}", method = {RequestMethod.GET})
     public List<LectureDetail> getLectureDetails(
         @PathVariable(value = "lectureId") Long lectureId) {
-        return lectureService.getLectureDetails(lectureId);
+        return professorService.getLectureDetails(lectureId);
     }
 
     @RequestMapping(value = "/lecture/detail/{lectureDetailId}", method = {RequestMethod.PUT})
     public LectureDetail updateLectureDetailCanceled(
         @PathVariable(value = "lectureDetailId") Long lectureDetailId) {
-        return lectureService.updateLectureDetailCanceled(lectureDetailId);
+        return professorService.updateLectureDetailCanceled(lectureDetailId);
     }
 
     @RequestMapping(value = "/lecture/{lectureId}/assignment", method = {RequestMethod.POST})
     public Assignment createLectureAssignment(
         @PathVariable(value = "lectureId") Long lectureId
         , @RequestBody Assignment assignment) {
-        return assignmentService.createLectureAssignment(lectureId, assignment);
+        return professorService.createLectureAssignment(lectureId, assignment);
     }
 
     @RequestMapping(value = "/lecture/{lectureId}/assignment", method = {RequestMethod.GET})
     public List<Assignment> getLectureAssignments(
         @PathVariable(value = "lectureId") Long lectureId) {
-        return assignmentService.getLectureAssignments(lectureId);
+        return professorService.getLectureAssignments(lectureId);
     }
 
     @RequestMapping(value = "/lecture/assignment/{assignmentId}", method = {RequestMethod.GET})
     public List<ProfessorAssignmentDetail> getProfessorAssignmentDetail(
         @PathVariable(value = "assignmentId") Long assignmentId) {
-        return assignmentService.getProfessorAssignmentDetail(assignmentId);
+        return professorService.getProfessorAssignmentDetail(assignmentId);
     }
 }
