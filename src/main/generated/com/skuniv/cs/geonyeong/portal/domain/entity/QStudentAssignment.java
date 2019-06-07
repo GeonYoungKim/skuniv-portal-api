@@ -19,9 +19,13 @@ public class QStudentAssignment extends EntityPathBase<StudentAssignment> {
 
     public static final QStudentAssignment studentAssignment = new QStudentAssignment("studentAssignment");
 
+    public final NumberPath<Long> assignmentId = createNumber("assignmentId", Long.class);
+
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
     public final StringPath part = createString("part");
+
+    public final StringPath studentId = createString("studentId");
 
     public QStudentAssignment(String variable) {
         super(StudentAssignment.class, forVariable(variable));

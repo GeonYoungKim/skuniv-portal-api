@@ -26,6 +26,8 @@ public class QLecture extends EntityPathBase<Lecture> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
+    public final StringPath lectureDay = createString("lectureDay");
+
     public final ListPath<LectureDetail, QLectureDetail> lectureDetailList = this.<LectureDetail, QLectureDetail>createList("lectureDetailList", LectureDetail.class, QLectureDetail.class, PathInits.DIRECT2);
 
     public final NumberPath<Double> lectureTime = createNumber("lectureTime", Double.class);

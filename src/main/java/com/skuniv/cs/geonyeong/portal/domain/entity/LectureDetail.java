@@ -15,6 +15,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -45,4 +46,14 @@ public class LectureDetail {
     @JoinColumn(name = "lecture_id")
     @JsonIgnore
     private Lecture lecture;
+
+    @Builder
+    public LectureDetail(Date lectureDate, String lectureDay, Double lectureDetailTime,
+        Boolean canceled, Lecture lecture) {
+        this.lectureDate = lectureDate;
+        this.lectureDay = lectureDay;
+        this.lectureDetailTime = lectureDetailTime;
+        this.canceled = canceled;
+        this.lecture = lecture;
+    }
 }

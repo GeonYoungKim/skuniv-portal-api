@@ -1,5 +1,6 @@
 package com.skuniv.cs.geonyeong.portal.domain.entity;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -19,4 +20,10 @@ public class StudentAssignment {
     private Long id;
 
     private String part;
+
+    @Column(name = "student_id")
+    private String studentId;
+
+    @Column(name = "assignment_id")
+    private Long assignmentId;
 }

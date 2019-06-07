@@ -14,17 +14,17 @@ import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import org.springframework.web.servlet.HandlerInterceptor;
+import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class PortalInterceptor implements HandlerInterceptor {
+public class PortalInterceptor extends HandlerInterceptorAdapter {
 
     private final JwtService jwtService;
 
     private final String HEADER_TOKEN_KEY = "Token";
-    private final String HEADER_ACCOUNT_TYPE_KEY = "Account-Type";
+    private final String HEADER_ACCOUNT_TYPE_KEY = "AccountType";
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response,
@@ -55,7 +55,7 @@ public class PortalInterceptor implements HandlerInterceptor {
         } catch (ExpiredJwtException e) {
             log.error("토큰이 만료되었음.");
             throw new TokenExpireException();
-        } catch (NullPointerException e)  {
+        } catch (NullPointerException e) {
             log.error("Missing Account-Type");
             throw new MissingAccountTypeException();
         }

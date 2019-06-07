@@ -1,10 +1,10 @@
 package com.skuniv.cs.geonyeong.portal.domain.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -33,6 +33,9 @@ public class Lecture {
     private Long id;
 
     private String name;
+    @Column(name = "lecture_day")
+    private String lectureDay;
+    @Column(name = "lecture_time")
     private Double lectureTime;
     private Double score;
 
@@ -41,32 +44,50 @@ public class Lecture {
         joinColumns = @JoinColumn(name = "lecture_id"),
         inverseJoinColumns = @JoinColumn(name = "student_id"))
     @JsonIgnore
-    private List<Student> studentList;
+    private List<Student> studentList = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "professor_id")
     @JsonIgnore
     private Professor professor;
 
-    @OneToMany(mappedBy = "lecture", cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "semester_id")
     @JsonIgnore
-    private List<LectureDetail> lectureDetailList;
+    private Semester semester;
 
     @OneToMany(mappedBy = "lecture", cascade = CascadeType.ALL)
     @JsonIgnore
-    private List<Assignment> assignmentList;
+    private List<LectureDetail> lectureDetailList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "lecture", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Assignment> assignmentList = new ArrayList<>();
 
     @Builder
-    public Lecture(String name, Double lectureTime, Double score,
+    public Lecture(String name, String lectureDay, Double lectureTime, Double score,
         List<Student> studentList, Professor professor,
+        Semester semester,
         List<LectureDetail> lectureDetailList,
         List<Assignment> assignmentList) {
         this.name = name;
+        this.lectureDay = lectureDay;
         this.lectureTime = lectureTime;
         this.score = score;
         this.studentList = studentList;
         this.professor = professor;
+        this.semester = semester;
         this.lectureDetailList = lectureDetailList;
         this.assignmentList = assignmentList;
+    }
+
+    public void addLectureDetail(LectureDetail lectureDetail) {
+        lectureDetail.setLecture(this);
+        this.lectureDetailList.add(lectureDetail);
+    }
+
+    public void addAssignment(Assignment assignment) {
+        assignment.setLecture(this);
+        this.assignmentList.add(assignment);
     }
 }

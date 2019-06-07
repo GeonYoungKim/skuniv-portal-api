@@ -3,7 +3,7 @@ package com.skuniv.cs.geonyeong.portal.controller;
 import com.skuniv.cs.geonyeong.portal.domain.entity.Professor;
 import com.skuniv.cs.geonyeong.portal.domain.vo.AccountResponse;
 import com.skuniv.cs.geonyeong.portal.enums.AccountType;
-import com.skuniv.cs.geonyeong.portal.service.ProfessorService;
+import com.skuniv.cs.geonyeong.portal.service.AccountService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/portal/account")
 public class AccountController {
 
-    private final ProfessorService professorService;
+    private final AccountService professorService;
 
     @RequestMapping(value = "/professor/signUp", method = {RequestMethod.POST}, produces = MediaType.APPLICATION_JSON_VALUE)
     public Professor signUp(@RequestBody Professor professor) {

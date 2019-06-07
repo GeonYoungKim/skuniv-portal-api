@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class ProfessorService {
+public class AccountService {
     private final CryptorService cryptorService;
     private final ProfessorRepository professorRepository;
     private final JwtService jwtService;

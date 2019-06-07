@@ -33,7 +33,7 @@ public class WebConfiguration implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(portalInterceptor)
-            .addPathPatterns("/api/v1/portal/professor/*")
+            .addPathPatterns("/**")
             .excludePathPatterns("/api/v1/portal/account/**")
         ;
     }
