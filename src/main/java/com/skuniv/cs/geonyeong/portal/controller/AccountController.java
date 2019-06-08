@@ -1,13 +1,9 @@
 package com.skuniv.cs.geonyeong.portal.controller;
 
 import com.skuniv.cs.geonyeong.portal.domain.entity.Professor;
+import com.skuniv.cs.geonyeong.portal.domain.entity.Student;
 import com.skuniv.cs.geonyeong.portal.domain.vo.AccountResponse;
-import com.skuniv.cs.geonyeong.portal.enums.AccountType;
 import com.skuniv.cs.geonyeong.portal.service.AccountService;
-import java.util.Date;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
@@ -24,16 +20,26 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/portal/account")
 public class AccountController {
 
-    private final AccountService professorService;
+    private final AccountService accountService;
 
     @RequestMapping(value = "/professor/signUp", method = {RequestMethod.POST}, produces = MediaType.APPLICATION_JSON_VALUE)
-    public Professor signUp(@RequestBody Professor professor) {
+    public Professor professorSignUp(@RequestBody Professor professor) {
         log.info("professor => {}", professor);
-        return professorService.signUp(professor);
+        return accountService.signUp(professor);
     }
 
     @RequestMapping(value = "/professor/signIn", method = {RequestMethod.POST}, produces = MediaType.APPLICATION_JSON_VALUE)
-    public AccountResponse signIn(@RequestBody Professor professor) {
-        return professorService.signIn(professor);
+    public AccountResponse professorSignIn(@RequestBody Professor professor) {
+        return accountService.signIn(professor);
+    }
+
+    @RequestMapping(value = "/student/signUp", method = {RequestMethod.POST}, produces = MediaType.APPLICATION_JSON_VALUE)
+    public Student studentSignUp(@RequestBody Student student) {
+        return accountService.signUp(student);
+    }
+
+    @RequestMapping(value = "/student/signIn", method = {RequestMethod.POST}, produces = MediaType.APPLICATION_JSON_VALUE)
+    public AccountResponse studentSignIn(@RequestBody Student student) {
+        return accountService.signIn(student);
     }
 }

@@ -3,7 +3,7 @@ package com.skuniv.cs.geonyeong.portal.handler;
 import com.skuniv.cs.geonyeong.portal.domain.vo.ExceptionResponse;
 import com.skuniv.cs.geonyeong.portal.enums.ExceptionType;
 import com.skuniv.cs.geonyeong.portal.exception.MissingAccountTypeException;
-import com.skuniv.cs.geonyeong.portal.exception.ProfessorSignInException;
+import com.skuniv.cs.geonyeong.portal.exception.SignInException;
 import com.skuniv.cs.geonyeong.portal.exception.TokenExpireException;
 import com.skuniv.cs.geonyeong.portal.exception.TokenInvalidException;
 import lombok.extern.slf4j.Slf4j;
@@ -19,8 +19,8 @@ public class ExceptionHandlerAdvice {
     private final ExceptionResponse DEFAULT_EXCEPTION_RESPONSE = ExceptionResponse.builder()
         .status(80800).message("Unknown Exception").build();
 
-    @ExceptionHandler(value = ProfessorSignInException.class)
-    public ExceptionResponse handleParsingException(ProfessorSignInException e) {
+    @ExceptionHandler(value = SignInException.class)
+    public ExceptionResponse handleParsingException(SignInException e) {
         return ExceptionType.getExceptionResponse(e).orElse(DEFAULT_EXCEPTION_RESPONSE);
     }
 
