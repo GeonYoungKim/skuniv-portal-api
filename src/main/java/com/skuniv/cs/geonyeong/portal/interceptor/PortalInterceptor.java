@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
@@ -23,14 +24,20 @@ public class PortalInterceptor extends HandlerInterceptorAdapter {
 
     private final JwtService jwtService;
 
-    private final String HEADER_TOKEN_KEY = "Token";
-    private final String HEADER_ACCOUNT_TYPE_KEY = "AccountType";
+    private final String HEADER_TOKEN_KEY = "token";
+    private final String HEADER_ACCOUNT_TYPE_KEY = "accountType";
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response,
         Object handler) throws Exception {
-        log.info("preHandle");
+
         log.info("path => {}", request.getRequestURI());
+        log.info("accountType => {}", request.getHeader(HEADER_ACCOUNT_TYPE_KEY));
+        log.info("token => {}", request.getHeader(HEADER_TOKEN_KEY));
+
+        if (StringUtils.equals(request.getMethod(), "OPTIONS"))
+            return true;
+
         try {
             AccountType accountType = AccountType
                 .valueOf(request.getHeader(HEADER_ACCOUNT_TYPE_KEY));
@@ -40,6 +47,7 @@ public class PortalInterceptor extends HandlerInterceptorAdapter {
                 case PROFESSOR:
                     log.info("accountType is PROFESSOR");
                     jwt = request.getHeader(HEADER_TOKEN_KEY);
+                    log.info("Token => {}", jwt);
                     isCheck = jwtService.checkProcessor(jwt);
                     checkAuthentication(isCheck, request, PROFESSOR_ID_KEY,
                         jwtService.getJwtId(jwt));
@@ -61,7 +69,7 @@ public class PortalInterceptor extends HandlerInterceptorAdapter {
         }
         log.info("pass interceptor");
         return true;
-    }
+}
 
     private void checkAuthentication(boolean isCheck, HttpServletRequest request,
         String attributeKey, String attributeValue) {

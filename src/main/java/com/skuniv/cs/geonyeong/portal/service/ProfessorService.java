@@ -16,6 +16,7 @@ import com.skuniv.cs.geonyeong.portal.repository.SemesterRepository;
 import com.skuniv.cs.geonyeong.portal.repository.StudentAssignmentRepository;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,6 +28,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class ProfessorService {
+
     private final AssignmentRepository assignmentRepository;
     private final StudentAssignmentRepository studentAssignmentRepository;
     private final LectureRepository lectureRepository;
@@ -34,16 +36,17 @@ public class ProfessorService {
     private final LectureDetailRepository lectureDetailRepository;
     private final SemesterRepository semesterRepository;
 
-
     private final String REPLACE_DAY = "요일";
-
+    private final String DAY_DELEMETER = ",";
 
     public List<Assignment> getLectureAssignments(Long lectureId) {
         return assignmentRepository.findByLecture(lectureRepository.findById(lectureId).get());
     }
 
     public List<ProfessorAssignmentDetail> getProfessorAssignmentDetail(Long assignmentId) {
-        return studentAssignmentRepository.findByAssignmentId(assignmentId);
+        List<ProfessorAssignmentDetail> professorAssignmentDetailList = studentAssignmentRepository.findByAssignmentId(assignmentId);
+        log.info("professorAssignmentDetailList => {}", professorAssignmentDetailList);
+        return professorAssignmentDetailList;
     }
 
     public Assignment createLectureAssignment(Long lectureId, Assignment assignment) {
@@ -56,31 +59,42 @@ public class ProfessorService {
     public List<Lecture> getLectures(Long semesterId, String professorId) {
         Professor professor = professorRepository.findById(professorId).get();
         Semester semester = semesterRepository.findById(semesterId).get();
-        return lectureRepository.findBySemesterAndProfessor(semester, professor);
+        List<Lecture> lectureList = lectureRepository
+            .findBySemesterAndProfessor(semester, professor);
+        lectureList.forEach(item -> {
+            List<Integer> dayNumList = Arrays.stream(item.getLectureDay().split(DAY_DELEMETER))
+                .map(day -> DAY_OF_WEEK_MAP.get(day)).collect(Collectors.toList());
+            Collections.sort(dayNumList);
+            String sortedLectureDay = dayNumList.stream().map(dayNum -> DAY_OF_WEEK_MAP.inverse().get(dayNum)).collect(
+                Collectors.joining(","));
+            item.setLectureDay(sortedLectureDay);
+        });
+        return lectureList;
     }
 
     private List<Integer> makeDayNumList(String days) {
-        return Arrays.stream(days.split(","))
+        return Arrays.stream(days.split(DAY_DELEMETER))
             .map(item -> DAY_OF_WEEK_MAP.get(item))
             .collect(Collectors.toList());
     }
 
-    private Long makeDiffDays (Date startDate, Date endDate) {
+    private Long makeDiffDays(Date startDate, Date endDate) {
         long diff = endDate.getTime() - startDate.getTime();
         return Math.abs(diff / (24 * 60 * 60 * 1000));
     }
 
-    private void addLectureDetailList(Long diffDays, List<Integer> dayNumList, Lecture lecture, Date startDate) {
+    private void addLectureDetailList(Long diffDays, List<Integer> dayNumList, Lecture lecture,
+        Date startDate) {
         Calendar cal = Calendar.getInstance();
         cal.setTime(startDate);
         for (int i = 1; i <= diffDays; i++) {
             cal.add(Calendar.DATE, 1);
-            int dayNum = cal.get(Calendar.DAY_OF_WEEK) ;
-            if(dayNumList.contains(dayNum)) {
+            int dayNum = cal.get(Calendar.DAY_OF_WEEK);
+            if (dayNumList.contains(dayNum)) {
                 LectureDetail lectureDetail = LectureDetail.builder()
                     .canceled(false)
                     .lecture(lecture)
-                    .lectureDetailTime(lecture.getLectureTime()/2)
+                    .lectureDetailTime(lecture.getLectureTime() / 2)
                     .lectureDay(DAY_OF_WEEK_MAP.inverse().get(dayNum))
                     .lectureDate(new Date(cal.getTimeInMillis()))
                     .build();
@@ -100,7 +114,7 @@ public class ProfessorService {
         // 1학기 날짜 차이 생성.
         Long diffDays = makeDiffDays(semester.getStartDate(), semester.getEndDate());
         // 강좌 요일 정보를 integer로 변환.
-        List<Integer> dayNumList =  makeDayNumList(lecture.getLectureDay());
+        List<Integer> dayNumList = makeDayNumList(lecture.getLectureDay());
         addLectureDetailList(diffDays, dayNumList, lecture, semester.getStartDate());
         semester.addLecture(lecture);
         semesterRepository.save(semester);

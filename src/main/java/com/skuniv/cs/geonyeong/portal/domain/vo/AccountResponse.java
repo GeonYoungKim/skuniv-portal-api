@@ -10,10 +10,12 @@ import lombok.NoArgsConstructor;
 public class AccountResponse {
     private String token;
     private AccountType accountType;
+    private String name;
 
     @Builder
-    public AccountResponse(String token, AccountType accountType) {
+    public AccountResponse(String token, AccountType accountType, String name) {
         this.token = token;
         this.accountType = accountType;
+        this.name = name;
     }
 }

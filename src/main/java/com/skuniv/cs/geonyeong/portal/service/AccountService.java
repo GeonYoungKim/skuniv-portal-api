@@ -1,6 +1,8 @@
 package com.skuniv.cs.geonyeong.portal.service;
 
 import com.skuniv.cs.geonyeong.portal.domain.entity.Professor;
+import com.skuniv.cs.geonyeong.portal.domain.vo.AccountResponse;
+import com.skuniv.cs.geonyeong.portal.enums.AccountType;
 import com.skuniv.cs.geonyeong.portal.exception.ProfessorSignInException;
 import com.skuniv.cs.geonyeong.portal.repository.ProfessorRepository;
 import java.io.UnsupportedEncodingException;
@@ -25,12 +27,14 @@ public class AccountService {
         return signUpProfessor;
     }
 
-    public String signIn(Professor professor) {
+    public AccountResponse signIn(Professor professor) {
         String password = cryptorService.encryptBase64(professor.getPassword());
         Optional<Professor> findProfessorOptional = professorRepository.findByIdAndPassword(professor.getId(), password);
         if(findProfessorOptional.isPresent()) {
             Professor findProfessor = findProfessorOptional.get();
-            return jwtService.makeJwt(findProfessor.getId(), findProfessor.getPassword());
+            String token = jwtService.makeJwt(findProfessor.getId(), findProfessor.getPassword());
+            return AccountResponse.builder().token(token).name(findProfessor.getName()).accountType(
+                AccountType.PROFESSOR).build();
         }
         throw new ProfessorSignInException();
     }

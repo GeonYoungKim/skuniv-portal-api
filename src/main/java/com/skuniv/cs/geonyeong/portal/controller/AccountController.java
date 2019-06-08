@@ -4,6 +4,10 @@ import com.skuniv.cs.geonyeong.portal.domain.entity.Professor;
 import com.skuniv.cs.geonyeong.portal.domain.vo.AccountResponse;
 import com.skuniv.cs.geonyeong.portal.enums.AccountType;
 import com.skuniv.cs.geonyeong.portal.service.AccountService;
+import java.util.Date;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
@@ -24,13 +28,12 @@ public class AccountController {
 
     @RequestMapping(value = "/professor/signUp", method = {RequestMethod.POST}, produces = MediaType.APPLICATION_JSON_VALUE)
     public Professor signUp(@RequestBody Professor professor) {
+        log.info("professor => {}", professor);
         return professorService.signUp(professor);
     }
 
     @RequestMapping(value = "/professor/signIn", method = {RequestMethod.POST}, produces = MediaType.APPLICATION_JSON_VALUE)
     public AccountResponse signIn(@RequestBody Professor professor) {
-        String token = professorService.signIn(professor);
-        return AccountResponse.builder().token(token).accountType(AccountType.PROFESSOR).build();
+        return professorService.signIn(professor);
     }
-
 }

@@ -3,12 +3,15 @@ package com.skuniv.cs.geonyeong.portal.domain.entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.skuniv.cs.geonyeong.portal.enums.AssignmentType;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -39,8 +42,9 @@ public class Assignment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(length = 100)
-    private String type;
+    @Column(name = "type", length = 100)
+    @Enumerated(EnumType.STRING)
+    private AssignmentType type;
     @Column(length = 200)
     private String name;
 
@@ -56,7 +60,6 @@ public class Assignment {
     @JoinTable(name = "student_assignment",
         joinColumns = @JoinColumn(name = "assignment_id"),
         inverseJoinColumns = @JoinColumn(name = "student_id"))
-    @JsonIgnore
     private List<Student> studentList = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)

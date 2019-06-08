@@ -6,8 +6,8 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class ProfessorAssignmentDetail {
-    private String studentName;
+    private String name;
     private String part;
-    private String studenPhone;
+    private String phone;
 
 }

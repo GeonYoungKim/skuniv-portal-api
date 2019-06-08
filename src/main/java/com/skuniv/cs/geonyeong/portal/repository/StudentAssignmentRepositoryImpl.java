@@ -19,9 +19,9 @@ public class StudentAssignmentRepositoryImpl implements StudentAssignmentReposit
     public List<ProfessorAssignmentDetail> findByAssignmentId(Long assignmentId) {
         return queryFactory
             .select(Projections.fields(ProfessorAssignmentDetail.class,
-                student.name.as("studentName"),
+                student.name.as("name"),
                 studentAssignment.part.as("part"),
-                student.phone.as("studentPhone")
+                student.phone.as("phone")
             )).from(studentAssignment)
             .where(studentAssignment.assignmentId.eq(assignmentId))
             .join(student).on(studentAssignment.studentId.eq(student.id))

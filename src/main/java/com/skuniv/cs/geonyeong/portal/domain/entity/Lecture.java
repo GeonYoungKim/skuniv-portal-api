@@ -61,7 +61,6 @@ public class Lecture {
     private List<LectureDetail> lectureDetailList = new ArrayList<>();
 
     @OneToMany(mappedBy = "lecture", cascade = CascadeType.ALL)
-    @JsonIgnore
     private List<Assignment> assignmentList = new ArrayList<>();
 
     @Builder

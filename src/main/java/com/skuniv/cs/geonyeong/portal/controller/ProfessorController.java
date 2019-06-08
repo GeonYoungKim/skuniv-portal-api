@@ -3,7 +3,6 @@ package com.skuniv.cs.geonyeong.portal.controller;
 
 import static com.skuniv.cs.geonyeong.portal.constant.PortalConstant.PROFESSOR_ID_KEY;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.skuniv.cs.geonyeong.portal.domain.entity.Assignment;
 import com.skuniv.cs.geonyeong.portal.domain.entity.Lecture;
 import com.skuniv.cs.geonyeong.portal.domain.entity.LectureDetail;
@@ -41,8 +40,8 @@ public class ProfessorController {
     public Lecture createLecture(
         @PathVariable(value = "semesterId") Long semesterId,
         @RequestAttribute(name = PROFESSOR_ID_KEY) String professorId,
-        @RequestBody Lecture lecture) throws JsonProcessingException {
-        log.info("createLecture");
+        @RequestBody Lecture lecture) {
+        log.info("lecture => {}", lecture);
         return professorService.createLecture(semesterId, professorId, lecture);
     }
 
@@ -68,6 +67,7 @@ public class ProfessorController {
     @RequestMapping(value = "/lecture/{lectureId}/assignment", method = {RequestMethod.GET})
     public List<Assignment> getLectureAssignments(
         @PathVariable(value = "lectureId") Long lectureId) {
+        log.info("lectureId => {}", lectureId);
         return professorService.getLectureAssignments(lectureId);
     }
 
