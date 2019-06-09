@@ -8,8 +8,6 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
-  mvc:
-    dispatch-options-request: true
 
 com:
   skuniv:
@@ -19,3 +17,5 @@ com:
           key: 123456789789456123456
         jwt:
           secretKey : ThisIsGeonyeongKimWithLyangHwaSpringPortalProjectJwtSecretKey
+server:
+  port: 9090

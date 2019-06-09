@@ -43,6 +43,8 @@ dependencies {
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.9.8'
     implementation 'javax.inject:javax.inject:1'
     implementation 'com.google.guava:guava:27.1-jre'
+    implementation 'com.google.code.gson:gson:2.8.5'
+
 
     compile 'com.querydsl:querydsl-apt:4.1.0'
     compile 'com.querydsl:querydsl-jpa:4.0.2'
