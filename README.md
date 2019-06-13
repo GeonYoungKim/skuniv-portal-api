@@ -1,4 +1,4 @@
-##서경대학교 포탈 서버(교수용)
+## 서경대학교 포탈 서버(교수용)
 
 ### 기능
 
@@ -284,7 +284,7 @@ Method = GET
 queryDsl을 사용하여 좀 더 간편하게 sql을 만들어 사용하였습니다.
 
 ```java
-@Override
+    @Override
     public List<ProfessorAssignmentDetail> findByAssignmentId(Long assignmentId) {
         return queryFactory
             .select(Projections.fields(ProfessorAssignmentDetail.class,
