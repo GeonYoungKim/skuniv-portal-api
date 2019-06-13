@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class AccountService {
+
     private final CryptorService cryptorService;
     private final ProfessorRepository professorRepository;
     private final StudentRepository studentRepository;
@@ -31,8 +32,9 @@ public class AccountService {
 
     public AccountResponse signIn(Professor professor) {
         String password = cryptorService.encryptBase64(professor.getPassword());
-        Optional<Professor> findProfessorOptional = professorRepository.findByIdAndPassword(professor.getId(), password);
-        if(findProfessorOptional.isPresent()) {
+        Optional<Professor> findProfessorOptional = professorRepository
+            .findByIdAndPassword(professor.getId(), password);
+        if (findProfessorOptional.isPresent()) {
             Professor findProfessor = findProfessorOptional.get();
             String token = jwtService.makeJwt(findProfessor.getId(), findProfessor.getPassword());
             return AccountResponse.builder().token(token).name(findProfessor.getName()).accountType(
@@ -43,11 +45,13 @@ public class AccountService {
 
     public AccountResponse signIn(Student student) {
         String password = cryptorService.encryptBase64(student.getPassword());
-        Optional<Student> findStudentOptional = studentRepository.findByIdAndPassword(student.getId(), password);
-        if(findStudentOptional.isPresent()) {
+        Optional<Student> findStudentOptional = studentRepository
+            .findByIdAndPassword(student.getId(), password);
+        if (findStudentOptional.isPresent()) {
             Student findStudent = findStudentOptional.get();
             String token = jwtService.makeJwt(findStudent.getId(), findStudent.getPassword());
-            return AccountResponse.builder().token(token).name(findStudent.getId()).accountType(AccountType.STUDENT).build();
+            return AccountResponse.builder().token(token).name(findStudent.getId())
+                .accountType(AccountType.STUDENT).build();
         }
         throw new SignInException();
     }
