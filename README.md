@@ -3,6 +3,7 @@
 ### 기능
 
 #### 1. 인증 기능
+
 - 회원가입
     ```
     requestUrl = /api/v1/portal/account/professor/signUp
@@ -29,6 +30,9 @@
         return encryptSource;
     }
     ```
+    <br>
+    <hr>
+    <br>
 - 로그인
     ```
     requestUrl = /api/v1/portal/account/professor/signIn
@@ -74,6 +78,9 @@
         return builder.compact();
     }
     ```
+    <br>
+    <hr>
+    <br>
 #### 2. 각 교수님에 따른 강좌 추가, 조회
 - 추가
 ```
@@ -175,6 +182,10 @@ semesterRepository.save(semester);
         }
     }
 ```
+<br>
+<hr>
+<br>
+
 - 조회
 ```
 requestUrl = /api/v1/portal/professor/semester/{semesterId}/lecture
@@ -202,7 +213,10 @@ Method = GET
         return lectureList;
     }
 ``` 
-
+   <br>
+   <hr>
+   <br>
+   
 #### 3.세부 강좌에 조회 및 휴강 선택.
 - 조회
 ```
@@ -218,6 +232,10 @@ Method = GET
       return lectureDetailRepository.findByLecture(lecture);
   }
 ```
+   <br>
+   <hr>
+   <br>
+   
 - 휴강 선택
 
 ```
@@ -233,7 +251,10 @@ Method = PUT
       return lectureDetailRepository.save(lectureDetail);
   }
 ```
-
+   <br>
+   <hr>
+   <br>
+   
 #### 4.과제 추가, 조회, 참여 학생정보 조회
 
 - 추가
@@ -250,7 +271,10 @@ Method = POST
         return assignment;
     }
 ```
-
+   <br>
+   <hr>
+   <br>
+   
 - 조회
 ```
 requestUrl = /api/v1/portal/professor/lecture/{lectureId}/assignment
@@ -263,7 +287,10 @@ Method = GET
         return assignmentRepository.findByLecture(lectureRepository.findById(lectureId).get());
     }
 ```
-
+   <br>
+   <hr>
+   <br>
+   
 - 과제에 참여중인 학생 정보 조회
 ```
 requestUrl = /api/v1/portal/professor/lecture/assignment/{assignmentId}
@@ -298,7 +325,10 @@ queryDsl을 사용하여 좀 더 간편하게 sql을 만들어 사용하였습�
             ;
     }
 ```
-
+   <br>
+   <hr>
+   <br>
+   
 ### 예외 종류
 
 #### 1. MissingAccountTypeException
@@ -313,7 +343,10 @@ queryDsl을 사용하여 좀 더 간편하게 sql을 만들어 사용하였습�
 #### 4. TokenInvalidException
   - 토큰이 유효하지 않았을때 내뱉는 예외입니다.
   
-
+   <br>
+   <hr>
+   <br>
+   
 ### 예외 처리
 
 ### ExceptionHandlerAdvice
@@ -347,7 +380,10 @@ public enum ExceptionType {
     }
 }
 ```
-
+   <br>
+   <hr>
+   <br>
+   
 ### Request Response 명세
 
 - swagger를 참조하시면 됩니다.
