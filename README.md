@@ -347,3 +347,8 @@ public enum ExceptionType {
     }
 }
 ```
+
+### Request Response 명세
+
+- swagger를 참조하시면 됩니다.
+  http://localhost:9090/swagger-ui.html
